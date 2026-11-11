@@ -8,12 +8,20 @@ import { Menu, X } from "lucide-react"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
+import { getUserRole, type UserRole } from "@/lib/types/user"
 
 const NAV_LINKS = [
   { label: "Browse Jobs", href: "/jobs" },
   { label: "Company", href: "/company" },
   { label: "Pricing", href: "/pricing" },
 ]
+
+/** Dashboard entry point per role. */
+const DASHBOARD_BY_ROLE: Record<UserRole, string> = {
+  seeker: "/dashboard/seeker",
+  recruiter: "/dashboard/recruiter",
+  admin: "/dashboard/admin",
+}
 
 function Logo({ className }: { className?: string }) {
   return (
@@ -38,6 +46,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const { data: session } = authClient.useSession()
   const user = session?.user
+  const dashboardHref = user ? DASHBOARD_BY_ROLE[getUserRole(user)] : "/signin"
 
   async function handleSignOut() {
     await authClient.signOut()
@@ -76,6 +85,16 @@ export function Navbar() {
                 <span className="max-w-32 truncate px-2 text-sm font-medium text-white/90">
                   {user.name}
                 </span>
+
+                <Link
+                  href={dashboardHref}
+                  className={cn(
+                    buttonVariants({ variant: "ghost", size: "lg" }),
+                    "text-white/70 hover:bg-white/5 hover:text-white"
+                  )}
+                >
+                  Dashboard
+                </Link>
 
                 <Button
                   variant="ghost"
@@ -150,6 +169,17 @@ export function Navbar() {
                   <span className="px-4 py-2.5 text-sm font-medium text-white/90">
                     {user.name}
                   </span>
+
+                  <Link
+                    href={dashboardHref}
+                    className={cn(
+                      buttonVariants({ size: "lg" }),
+                      "w-full rounded-xl bg-[#5b46f5] text-white hover:bg-[#4c39e8]"
+                    )}
+                    onClick={() => setOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
 
                   <Button
                     variant="ghost"

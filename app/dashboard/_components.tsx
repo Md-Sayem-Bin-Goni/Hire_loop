@@ -1,7 +1,21 @@
-"use client"
-
 import { cn } from "@/lib/utils"
 import type { LucideIcon } from "lucide-react"
+
+/**
+ * Shared building blocks for the dashboard pages.
+ * Only used by app/dashboard/** — it is NOT a route (filename starts with _).
+ */
+
+export function PagePlaceholder({ title, role }: { title: string; role: string }) {
+    return (
+        <div className="p-4 md:p-6">
+            <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+            <p className="mt-2 text-sm capitalize text-muted-foreground">
+                {role} dashboard section — coming soon.
+            </p>
+        </div>
+    )
+}
 
 /* ---------------- Stats row ---------------- */
 
@@ -74,6 +88,7 @@ export function DonutChart({
     const total = data.reduce((sum, d) => sum + d.value, 0) || 1
     const radius = size / 2 - 10
     const circumference = 2 * Math.PI * radius
+    // Pre-compute each arc's color/dash/offset up front (no reassignment inside JSX).
     const arcs = data.reduce<{ d: { label: string; value: number }; color: string; dash: number; offset: number }[]>(
         (acc, d) => {
             const prev = acc[acc.length - 1]
@@ -130,7 +145,7 @@ export function DonutChart({
     )
 }
 
-/* ---------------- Activity / list sections ---------------- */
+/* ---------------- Sections / activity lists ---------------- */
 
 export function DashboardSection({
     title,
@@ -184,17 +199,6 @@ export function ActivityItem({
                 <p className="mt-0.5 text-xs text-muted-foreground">{time}</p>
             </div>
         </li>
-    )
-}
-
-export function PagePlaceholder({ title, role }: { title: string; role: string }) {
-    return (
-        <div className="p-4 md:p-6">
-            <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-            <p className="mt-2 text-sm capitalize text-muted-foreground">
-                {role} dashboard section — coming soon.
-            </p>
-        </div>
     )
 }
 

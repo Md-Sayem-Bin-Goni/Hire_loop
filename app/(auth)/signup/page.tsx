@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import {
   Briefcase,
@@ -48,6 +49,7 @@ const ROLES = [
 type Role = (typeof ROLES)[number]["value"]
 
 export default function SignUpPage() {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [role, setRole] = useState<Role>("seeker")
@@ -73,12 +75,12 @@ export default function SignUpPage() {
         callbackURL: "/", // Redirects to home after the user signs up.
       } as Parameters<typeof authClient.signUp.email>[0]
 
-      const { data, error } = await authClient.signUp.email(payload)
-      console.log(data)
+      const { error } = await authClient.signUp.email(payload)
       if (error) {
         setError(error.message ?? "Something went wrong. Please try again.")
         return
       }
+      router.push("/")
     } catch {
       setError("Something went wrong. Please try again.")
     } finally {

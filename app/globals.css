@@ -127,3 +127,15 @@
     @apply font-sans;
     }
 }
+/* ---------- Dashboard form utilities (used by PageShell-style forms) ---------- */
+@layer components {
+  /* Dark rounded input surface used by inputs, selects and textareas */
+  .surface-field {
+    @apply h-10 w-full rounded-lg border border-white/10 bg-white/5 px-3 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-[#5C53FE]/50 focus-visible:ring-3 focus-visible:ring-[#5C53FE]/30;
+  }
+
+  /* Primary brand action button */
+  .btn-brand {
+    @apply inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-[#5C53FE] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#4c39e8] disabled:opacity-50;
+  }
+}

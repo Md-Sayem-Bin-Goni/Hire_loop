@@ -16,6 +16,26 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 
+function getSignInCallbackURL() {
+  const redirectTo = new URLSearchParams(window.location.search).get("redirectTo")
+  if (!redirectTo) return "/"
+
+  try {
+    const url = new URL(redirectTo, window.location.origin)
+    if (
+      url.origin !== window.location.origin ||
+      !redirectTo.startsWith("/") ||
+      redirectTo.startsWith("//")
+    ) {
+      return "/"
+    }
+
+    return `${url.pathname}${url.search}${url.hash}`
+  } catch {
+    return "/"
+  }
+}
+
 export default function SignInPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -30,12 +50,11 @@ export default function SignInPage() {
     const password = String(formData.get("password") ?? "")
 
     try {
-      const { data, error } = await authClient.signIn.email({
+      const { error } = await authClient.signIn.email({
         email, // required, The email address of the user.
         password, // required, The password of the user.
-        callbackURL: "/", // Redirects to home after the user signs in.
+        callbackURL: getSignInCallbackURL(),
       })
-      console.log(data)
       if (error) {
         setError(error.message ?? "Something went wrong. Please try again.")
         return

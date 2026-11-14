@@ -16,11 +16,7 @@ import { Navbar } from "@/components/site/navbar"
 import { Footer } from "@/components/site/footer"
 import { JobActions, VisitWebsiteButton } from "./_components"
 
-export default async function JobDetailsPage({
-    params,
-}: {
-    params: Promise<{ jobId: string }>
-}) {
+export default async function JobDetailsPage({params,}: {params: Promise<{ jobId: string }>}) {
     const { jobId } = await params
 
     let job: StoredJob
@@ -53,7 +49,11 @@ export default async function JobDetailsPage({
                             </p>
                         </div>
                     </div>
-                    <JobActions jobTitle={job.jobTitle} />
+                    <JobActions
+                        jobId={job._id}
+                        jobTitle={job.jobTitle}
+                        companyName={job.companyName}
+                    />
                 </section>
 
                 <div className="mt-6 flex flex-col gap-6 lg:grid lg:grid-cols-[1fr_320px]">

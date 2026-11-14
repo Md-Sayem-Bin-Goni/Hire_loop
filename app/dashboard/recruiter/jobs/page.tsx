@@ -30,9 +30,7 @@ import { ConfirmDialog } from "@/components/ui/confirm-dialog"
 import { PageContainer, PageHeader } from "@/components/dashboard/page-shell"
 import { toast } from "@/components/ui/toast"
 import { deleteJob, getJobs } from "@/lib/api/jobs"
-import type { JobFormData, JobStatus } from "@/lib/types/jobs"
-
-type Job = JobFormData & { _id: string; createdAt?: string }
+import type { JobStatus, StoredJob } from "@/lib/types/jobs"
 
 /** Full category → short dept label shown under the job title. */
 const DEPT_LABELS: Record<string, string> = {
@@ -102,16 +100,16 @@ function TypePill({ type }: { type: string }) {
 }
 
 export default function ManageJobsPage() {
-    const [jobs, setJobs] = useState<Job[]>([])
+    const [jobs, setJobs] = useState<StoredJob[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
     // Job pending deletion (drives the confirm dialog).
-    const [pendingDelete, setPendingDelete] = useState<Job | null>(null)
+    const [pendingDelete, setPendingDelete] = useState<StoredJob | null>(null)
     const [deleting, setDeleting] = useState(false)
 
     useEffect(() => {
         getJobs()
-            .then((data) => setJobs(data as Job[]))
+            .then(setJobs)
             .catch((err) => {
                 console.error("getJobs failed:", err)
                 setError(true)

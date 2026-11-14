@@ -37,3 +37,6 @@ export type JobFormData = {
     applicants: number
     status: JobStatus
 }
+
+/** A job as stored in the DB / returned by the API (JobFormData + DB-generated fields). */
+export type StoredJob = JobFormData & { _id: string; createdAt?: string }

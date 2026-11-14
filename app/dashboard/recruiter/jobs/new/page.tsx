@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button"
 import { PageContainer, PageHeader } from "@/components/dashboard/page-shell"
 import { JobForm } from "@/components/dashboard/job-form"
 import { createJob } from "@/lib/api/jobs"
-import { JOB_CATEGORIES, type JobFormData } from "@/lib/types/jobs"
+import { type JobFormData, type JobType } from "@/lib/types/jobs"
 import { toast } from "@/components/ui/toast"
 
 export default function NewJobPage() {
@@ -51,37 +51,37 @@ export default function NewJobPage() {
                 overline="Manage Jobs › Create New Listing"
                 title="Post a New Job"
                 subtitle="Fill in the position specifications to attract qualified talent across our network."
-                action={
-                    <Button type="submit" form="new-job-form" className="btn-brand" disabled={loading}>
-                        Publish Job
-                        <ArrowRight aria-hidden />
-                    </Button>
-                }
             />
 
             <JobForm
                 formId="new-job-form"
                 initial={{
-                    title: "Frontend Developer",
-                    companyName: "HirePulse Network",
-                    category: JOB_CATEGORIES[0],
-                    jobType: "full-time",
+                    title: "",
+                    companyName: "",
+                    category: "",
+                    jobType: "" as JobType,
                     isRemote: false,
-                    location: "New York, USA",
-                    deadline: "2025-05-30",
-                    minSalary: "25",
-                    maxSalary: "40",
+                    location: "",
+                    deadline: "",
+                    minSalary: "",
+                    maxSalary: "",
                     salaryFrequency: "per hour",
-                    responsibilities:
-                        "Showcase your commitment to delivering exceptional user interfaces and digital experiences. You will collaborate directly with systems designers and backend engineers to craft responsive, micro-interaction rich products.",
-                    requirements:
-                        "• 3+ years of experience with React, TypeScript, and modern state architectures\n• Solid understanding of DOM performance and component-driven designs\n• Experience partnering closely with product teams and UI/UX designers",
+                    responsibilities: "",
+                    requirements: "",
                     applicants: 0,
                     status: "active",
                 }}
                 loading={loading}
                 onSubmit={handleSubmit}
             />
+
+            {/* Submit sits below the form (linked via formId). */}
+            <div className="flex justify-end">
+                <Button type="submit" form="new-job-form" className="btn-brand" disabled={loading}>
+                    Publish Job
+                    <ArrowRight aria-hidden />
+                </Button>
+            </div>
         </PageContainer>
     )
 }

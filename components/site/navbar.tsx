@@ -6,6 +6,7 @@ import Link from "next/link"
 import { Menu, X } from "lucide-react"
 
 import { Button, buttonVariants } from "@/components/ui/button"
+import { toast } from "@/components/ui/toast"
 import { cn } from "@/lib/utils"
 import { authClient } from "@/lib/auth-client"
 import { getUserRole, type UserRole } from "@/lib/types/user"
@@ -49,8 +50,20 @@ export function Navbar() {
   const dashboardHref = user ? DASHBOARD_BY_ROLE[getUserRole(user)] : "/signin"
 
   async function handleSignOut() {
-    await authClient.signOut()
-    setOpen(false)
+    try {
+      await authClient.signOut()
+      setOpen(false)
+      toast.add({
+        title: "Signed out",
+        description: "You have been signed out. See you soon!",
+      })
+    } catch {
+      toast.add({
+        title: "Sign out failed",
+        description: "Something went wrong. Please try again.",
+        variant: "error",
+      })
+    }
   }
 
   return (

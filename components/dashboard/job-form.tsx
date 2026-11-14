@@ -19,6 +19,7 @@ import { Building2, Calendar, MapPin } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { toast } from "@/components/ui/toast"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
@@ -58,6 +59,17 @@ export function JobForm({
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+
+        // Guard: min salary cannot exceed max salary (number inputs don't check this for us).
+        if (Number(form.minSalary) > Number(form.maxSalary)) {
+            toast.add({
+                title: "Check the salary range",
+                description: "Min salary/rate cannot be greater than max salary/rate.",
+                variant: "error",
+            })
+            return
+        }
+
         await onSubmit({ ...form })
     }
 

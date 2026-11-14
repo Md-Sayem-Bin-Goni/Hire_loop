@@ -22,9 +22,7 @@ import { PageContainer, PageHeader, SectionCard } from "@/components/dashboard/p
 import { Field } from "@/components/shared/field"
 import { PillGroup } from "@/components/shared/pill-group"
 import { getJob } from "@/lib/api/jobs"
-import type { JobFormData } from "@/lib/types/jobs"
-
-type Job = JobFormData & { _id: string; createdAt?: string }
+import type { StoredJob } from "@/lib/types/jobs"
 
 /** Plain read-only text styled like an input. */
 function DetailBox({ value }: { value?: string | number }) {
@@ -37,7 +35,7 @@ function DetailBox({ value }: { value?: string | number }) {
 
 export default function JobDetailPage() {
     const { jobId } = useParams<{ jobId: string }>()
-    const [job, setJob] = useState<Job | null>(null)
+    const [job, setJob] = useState<StoredJob | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
 

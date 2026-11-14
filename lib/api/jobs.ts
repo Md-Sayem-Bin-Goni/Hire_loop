@@ -5,7 +5,7 @@
  * Set NEXT_PUBLIC_API_BASE_URL to its base (e.g. http://localhost:5000).
  */
 
-import type { JobFormData } from "@/lib/types/jobs"
+import type { JobFormData, StoredJob } from "@/lib/types/jobs"
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || ""
 
@@ -23,12 +23,12 @@ export const createJob = async (data: JobFormData) => {
     return res.json() as Promise<{ insertedId?: string }>
 }
 
-export const getJobs = async () => {
-    const res = await fetch(`${BASE_URL}/jobs`)
+export const getJobs = async (query:  '') => {
+    const res = await fetch(`${BASE_URL}/jobs?${query}`)
     if (!res.ok) {
         throw new Error(`Fetching jobs failed (status ${res.status})`)
     }
-    return res.json() as Promise<(JobFormData & { _id: string })[]>
+    return res.json() as Promise<StoredJob[]>
 }
 
 export const getJob = async (id: string) => {
@@ -36,7 +36,7 @@ export const getJob = async (id: string) => {
     if (!res.ok) {
         throw new Error(`Fetching job failed (status ${res.status})`)
     }
-    return res.json() as Promise<JobFormData & { _id: string }>
+    return res.json() as Promise<StoredJob>
 }
 
 export const deleteJob = async (id: string) => {

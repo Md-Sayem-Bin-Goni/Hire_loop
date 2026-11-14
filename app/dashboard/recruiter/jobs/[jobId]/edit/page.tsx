@@ -15,22 +15,20 @@ import { Button } from "@/components/ui/button"
 import { PageContainer, PageHeader } from "@/components/dashboard/page-shell"
 import { JobForm } from "@/components/dashboard/job-form"
 import { getJob, updateJob } from "@/lib/api/jobs"
-import type { JobFormData } from "@/lib/types/jobs"
+import type { JobFormData, StoredJob } from "@/lib/types/jobs"
 import { toast } from "@/components/ui/toast"
-
-type Job = JobFormData & { _id: string }
 
 export default function EditJobPage() {
     const { jobId } = useParams<{ jobId: string }>()
     const router = useRouter()
-    const [job, setJob] = useState<Job | null>(null)
+    const [job, setJob] = useState<StoredJob | null>(null)
     const [loading, setLoading] = useState(true) // initial fetch
     const [error, setError] = useState(false)
     const [saving, setSaving] = useState(false)
 
     useEffect(() => {
         getJob(jobId)
-            .then((data) => setJob({ ...data, _id: (data as Job)._id }))
+            .then((data) => setJob(data))
             .catch((err) => {
                 console.error("getJob failed:", err)
                 setError(true)

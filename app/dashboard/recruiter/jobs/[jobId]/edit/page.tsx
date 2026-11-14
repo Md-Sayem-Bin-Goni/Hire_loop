@@ -84,7 +84,7 @@ export default function EditJobPage() {
         <PageContainer width="narrow">
             <PageHeader
                 overline="Manage Jobs › Edit Listing"
-                title={`Edit: ${job.title}`}
+                title={`Edit: ${job.jobTitle}`}
                 subtitle="Update any field below — changes are saved to the database on submit."
                 action={
                     <Button type="submit" form="edit-job-form" className="btn-brand" disabled={saving}>

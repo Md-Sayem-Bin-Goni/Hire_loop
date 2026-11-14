@@ -22,7 +22,7 @@ import { PageContainer, PageHeader, SectionCard } from "@/components/dashboard/p
 import { Field } from "@/components/shared/field"
 import { PillGroup } from "@/components/shared/pill-group"
 import { getJob } from "@/lib/api/jobs"
-import type { StoredJob } from "@/lib/types/jobs"
+import { JOB_TYPES, type StoredJob } from "@/lib/types/jobs"
 
 /** Plain read-only text styled like an input. */
 function DetailBox({ value }: { value?: string | number }) {
@@ -53,7 +53,7 @@ export default function JobDetailPage() {
         <PageContainer width="narrow">
             <PageHeader
                 overline="Manage Jobs › Job Details"
-                title={loading ? "Loading…" : (job?.title ?? error ? "Job not found" : "")}
+                title={loading ? "Loading…" : (job?.jobTitle ?? error ? "Job not found" : "")}
                 subtitle={
                     error
                         ? "The job could not be loaded. Is the backend running?"
@@ -71,14 +71,14 @@ export default function JobDetailPage() {
                     <SectionCard index={1} title="Basic Information">
                         <div className="flex flex-col gap-5">
                             <Field label="Job title">
-                                <DetailBox value={job.title} />
+                                <DetailBox value={job.jobTitle} />
                             </Field>
                             <div className="grid gap-5 sm:grid-cols-2">
                                 <Field label="Company name">
                                     <DetailBox value={job.companyName} />
                                 </Field>
                                 <Field label="Job category">
-                                    <DetailBox value={job.category} />
+                                    <DetailBox value={job.jobCategory} />
                                 </Field>
                             </div>
                             <fieldset className="flex flex-col gap-2">
@@ -87,9 +87,9 @@ export default function JobDetailPage() {
                                     name="job-type-view"
                                     value={job.jobType}
                                     onChange={() => {}}
-                                    options={["Full-time", "Part-time", "Contract", "Internship"].map((t) => ({
-                                        value: t.toLowerCase(),
-                                        label: t,
+                                    options={JOB_TYPES.map((type) => ({
+                                        value: type,
+                                        label: type,
                                     }))}
                                     className="grid grid-cols-2 gap-2 sm:grid-cols-4"
                                     pillClassName="h-11 justify-center capitalize cursor-default"
@@ -105,14 +105,14 @@ export default function JobDetailPage() {
                                 <div className="flex flex-col gap-1">
                                     <span className="text-white/90">Remote work allowed</span>
                                     <p className="text-xs text-white/50">
-                                        {job.isRemote ? "Worldwide / distributed applications" : "On-site or hybrid"}
+                                        {job.isWorldwide ? "Worldwide / distributed applications" : "On-site or hybrid"}
                                     </p>
                                 </div>
                                 <span
-                                    className={`h-6 w-11 rounded-full transition-colors ${job.isRemote ? "bg-[#5C53FE]" : "bg-white/15"}`}
+                                    className={`h-6 w-11 rounded-full transition-colors ${job.isWorldwide ? "bg-[#5C53FE]" : "bg-white/15"}`}
                                 >
                                     <span
-                                        className={`block size-5 translate-y-0.5 rounded-full bg-white transition-transform ${job.isRemote ? "translate-x-5.5 ml-1" : "ml-1"}`}
+                                        className={`block size-5 translate-y-0.5 rounded-full bg-white transition-transform ${job.isWorldwide ? "translate-x-5.5 ml-1" : "ml-1"}`}
                                     />
                                 </span>
                             </div>
@@ -123,7 +123,7 @@ export default function JobDetailPage() {
                                             aria-hidden
                                             className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-white/50"
                                         />
-                                        <DetailBox value={job.isRemote ? "Remote" : job.location} />
+                                        <DetailBox value={job.isWorldwide ? "Remote" : job.jobLocation} />
                                     </div>
                                 </Field>
                                 <Field label="Application deadline">
@@ -132,7 +132,7 @@ export default function JobDetailPage() {
                                             aria-hidden
                                             className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-white/50"
                                         />
-                                        <DetailBox value={job.deadline} />
+                                        <DetailBox value={job.applicationDeadline} />
                                     </div>
                                 </Field>
                             </div>
@@ -144,7 +144,7 @@ export default function JobDetailPage() {
                                     <DetailBox value={job.maxSalary} />
                                 </Field>
                                 <Field label="Frequency">
-                                    <DetailBox value={job.salaryFrequency} />
+                                    <DetailBox value={job.frequency} />
                                 </Field>
                             </div>
                         </div>
@@ -171,13 +171,13 @@ export default function JobDetailPage() {
                             <Field label="Applicants">
                                 <p className="flex items-center gap-2 text-sm text-white/80">
                                     <Users aria-hidden className="size-4 text-white/50" />
-                                    {job.applicants} Candidates
+                                    {job.applicants ?? 0} Candidates
                                 </p>
                             </Field>
                             <Field label="Company">
                                 <p className="flex items-center gap-2 text-sm text-white/80">
                                     <Building2 aria-hidden className="size-4 text-white/50" />
-                                    {job.isRemote ? <Globe className="size-4 text-white/50" /> : null}
+                                    {job.isWorldwide ? <Globe className="size-4 text-white/50" /> : null}
                                     {job.companyName}
                                 </p>
                             </Field>

@@ -34,12 +34,17 @@ import type { JobStatus, StoredJob } from "@/lib/types/jobs"
 
 /** Full category → short dept label shown under the job title. */
 const DEPT_LABELS: Record<string, string> = {
-    "Engineering & Tech": "Engineering",
-    "Design & Creative": "Design",
-    "Product & Management": "Product",
+    "Technology": "Tech",
+    "Design": "Design",
+    "Marketing": "Marketing",
+    "Writing & Content": "Content",
+    "Sales": "Sales",
+    "Customer Service": "Support",
+    "Human Resources": "HR",
+    "Finance & Accounting": "Finance",
+    "Business Development": "Biz Dev",
+    "IT & Networking": "IT",
     "Data & Analytics": "Data",
-    "Marketing & Growth": "Marketing",
-    "Customer Support": "Support",
 }
 
 const FREQ_LABELS: Record<string, string> = {
@@ -75,8 +80,8 @@ function postedAgo(createdAt?: string) {
     return "Posted just now"
 }
 
-function StatusBadge({ status }: { status: JobStatus }) {
-    const active = status === "active"
+function StatusBadge({ status }: { status?: JobStatus }) {
+    const active = status !== "closed" && status !== "draft"
     return (
         <span
             className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${
@@ -131,7 +136,7 @@ export default function ManageJobsPage() {
             setJobs((prev) => prev.filter((job) => job._id !== pendingDelete._id))
             toast.add({
                 title: "Job deleted",
-                description: `"${pendingDelete.title}" has been removed.`,
+                description: `"${pendingDelete.jobTitle}" has been removed.`,
             })
             setPendingDelete(null)
         } catch (err) {
@@ -212,9 +217,9 @@ export default function ManageJobsPage() {
                                             href={`/dashboard/jobs/${job._id}`}
                                             className="block truncate text-sm font-medium text-white/90 hover:text-[#a78bfa] hover:underline"
                                         >
-                                            {job.title}
+                                            {job.jobTitle}
                                         </Link>
-                                        <p className="text-xs text-[#a78bfa]">{DEPT_LABELS[job.category] ?? job.category}</p>
+                                        <p className="text-xs text-[#a78bfa]">{DEPT_LABELS[job.jobCategory] ?? job.jobCategory}</p>
                                     </div>
                                 </div>
 
@@ -222,7 +227,7 @@ export default function ManageJobsPage() {
                                 <div className="min-w-0">
                                     <p className="truncate text-sm text-white/90">{job.companyName}</p>
                                     <p className="flex items-center gap-1 truncate text-xs text-white/45">
-                                        {job.isRemote ? (
+                                        {job.isWorldwide ? (
                                             <>
                                                 <Globe aria-hidden className="size-3 shrink-0" />
                                                 Remote
@@ -230,7 +235,7 @@ export default function ManageJobsPage() {
                                         ) : (
                                             <>
                                                 <MapPin aria-hidden className="size-3 shrink-0" />
-                                                {job.location}
+                                                {job.jobLocation}
                                             </>
                                         )}
                                     </p>
@@ -243,13 +248,13 @@ export default function ManageJobsPage() {
 
                                 {/* Compensation */}
                                 <p className="text-sm text-white/80">
-                                    €{job.minSalary} – €{job.maxSalary} / {FREQ_LABELS[job.salaryFrequency] ?? job.salaryFrequency}
+                                    €{job.minSalary} – €{job.maxSalary} / {FREQ_LABELS[job.frequency] ?? job.frequency}
                                 </p>
 
                                 {/* Applicants */}
                                 <p className="flex items-center gap-1.5 text-sm text-white/80">
                                     <Users aria-hidden className="size-3.5 text-white/50" />
-                                    {job.applicants} Candidates
+                                    {job.applicants ?? 0} Candidates
                                 </p>
 
                                 {/* Status */}
@@ -259,9 +264,9 @@ export default function ManageJobsPage() {
 
                                 {/* Deadline */}
                                 <div>
-                                    <p className="text-sm text-white/80">{formatDate(job.deadline)}</p>
+                                    <p className="text-sm text-white/80">{formatDate(job.applicationDeadline)}</p>
                                     <p className="text-xs text-white/40">
-                                        {job.status === "active" ? postedAgo(job.createdAt) ?? "—" : "Closed"}
+                                        {job.status !== "closed" && job.status !== "draft" ? postedAgo(job.createdAt) ?? "—" : "Closed"}
                                     </p>
                                 </div>
 
@@ -269,14 +274,14 @@ export default function ManageJobsPage() {
                                 <div className="flex items-center justify-end gap-1.5">
                                     <Link
                                         href={`/dashboard/jobs/${job._id}`}
-                                        aria-label={`View ${job.title}`}
+                                        aria-label={`View ${job.jobTitle}`}
                                         className="flex size-8 items-center justify-center rounded-md text-white/50 transition-colors hover:bg-white/10 hover:text-[#a78bfa]"
                                     >
                                         <Eye aria-hidden className="size-4" />
                                     </Link>
                                     <Link
                                         href={`/dashboard/recruiter/jobs/${job._id}/edit`}
-                                        aria-label={`Edit ${job.title}`}
+                                        aria-label={`Edit ${job.jobTitle}`}
                                         className="flex h-8 items-center gap-1.5 rounded-md border border-[#5C53FE]/40 bg-[#5C53FE]/15 px-3 text-xs font-medium text-[#a78bfa] transition-colors hover:bg-[#5C53FE]/25"
                                     >
                                         <Pencil aria-hidden className="size-3.5" />
@@ -285,7 +290,7 @@ export default function ManageJobsPage() {
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        aria-label={`Delete ${job.title}`}
+                                        aria-label={`Delete ${job.jobTitle}`}
                                         onClick={() => setPendingDelete(job)}
                                         className="size-8 text-white/50 hover:bg-white/10 hover:text-red-400"
                                     >
@@ -294,7 +299,7 @@ export default function ManageJobsPage() {
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        aria-label={`More actions for ${job.title}`}
+                                        aria-label={`More actions for ${job.jobTitle}`}
                                         onClick={() => stubAction("More actions")}
                                         className="size-8 text-white/50 hover:bg-white/10"
                                     >
@@ -313,7 +318,7 @@ export default function ManageJobsPage() {
                 title="Delete this job?"
                 description={
                     pendingDelete
-                        ? `"${pendingDelete.title}" at ${pendingDelete.companyName} will be permanently removed from the database. This cannot be undone.`
+                        ? `"${pendingDelete.jobTitle}" at ${pendingDelete.companyName} will be permanently removed from the database. This cannot be undone.`
                         : undefined
                 }
                 confirmLabel="Delete"

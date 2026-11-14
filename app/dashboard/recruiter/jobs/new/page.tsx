@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button"
 import { PageContainer, PageHeader } from "@/components/dashboard/page-shell"
 import { JobForm } from "@/components/dashboard/job-form"
 import { createJob } from "@/lib/api/jobs"
-import { type JobFormData, type JobType } from "@/lib/types/jobs"
+import { type JobFormData } from "@/lib/types/jobs"
 import { toast } from "@/components/ui/toast"
 
 export default function NewJobPage() {
@@ -56,20 +56,18 @@ export default function NewJobPage() {
             <JobForm
                 formId="new-job-form"
                 initial={{
-                    title: "",
+                    jobTitle: "",
                     companyName: "",
-                    category: "",
-                    jobType: "" as JobType,
-                    isRemote: false,
-                    location: "",
-                    deadline: "",
+                    jobCategory: "",
+                    jobType: "Full-time",
+                    isWorldwide: false,
+                    jobLocation: "",
+                    applicationDeadline: "",
                     minSalary: "",
                     maxSalary: "",
-                    salaryFrequency: "per hour",
+                    frequency: "per hour",
                     responsibilities: "",
                     requirements: "",
-                    applicants: 0,
-                    status: "active",
                 }}
                 loading={loading}
                 onSubmit={handleSubmit}

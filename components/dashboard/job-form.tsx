@@ -79,15 +79,15 @@ export function JobForm({
                 <SectionCard index={1} title="Basic Information">
                     <div className="flex flex-col gap-5">
                         {/* Job Title */}
-                        <Field label="Job title" htmlFor="title" required>
+                        <Field label="Job title" htmlFor="jobTitle" required>
                             <Input
-                                id="title"
-                                name="title"
+                                id="jobTitle"
+                                name="jobTitle"
                                 required
                                 minLength={3}
                                 maxLength={80}
-                                value={form.title}
-                                onChange={(e) => set("title")(e.target.value)}
+                                value={form.jobTitle}
+                                onChange={(e) => set("jobTitle")(e.target.value)}
                                 placeholder="e.g. Senior Product Designer"
                                 className={inputClass}
                             />
@@ -112,9 +112,9 @@ export function JobForm({
                                     />
                                 </div>
                             </Field>
-                            <Field label="Job category" htmlFor="category" required>
-                                <Select value={form.category} onValueChange={(value) => set("category")(value)}>
-                                    <SelectTrigger id="category" className={inputClass}>
+                            <Field label="Job category" htmlFor="jobCategory" required>
+                                <Select value={form.jobCategory} onValueChange={(value) => set("jobCategory")(value)}>
+                                    <SelectTrigger id="jobCategory" className={inputClass}>
                                         <SelectValue placeholder="Select a category" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -134,10 +134,10 @@ export function JobForm({
                             <PillGroup
                                 name="job-type"
                                 value={form.jobType}
-                                onChange={(value) => set("jobType")(value.toLowerCase() as JobType)}
-                                options={JOB_TYPES.map((type) => ({ value: type.toLowerCase(), label: type }))}
+                                onChange={(value) => set("jobType")(value as JobType)}
+                                options={JOB_TYPES.map((type) => ({ value: type, label: type }))}
                                 className="grid grid-cols-2 gap-2 sm:grid-cols-4"
-                                pillClassName="h-11 justify-center capitalize"
+                                pillClassName="h-11 justify-center"
                             />
                         </fieldset>
                     </div>
@@ -149,7 +149,7 @@ export function JobForm({
                         {/* Remote Work Allowed (isRemote) */}
                         <div className="flex items-center justify-between gap-4 rounded-lg border border-white/10 bg-white/5 p-4">
                             <div className="flex flex-col gap-1">
-                                <Label htmlFor="isRemote" className="text-white/90">
+                                <Label htmlFor="isWorldwide" className="text-white/90">
                                     Remote work allowed
                                 </Label>
                                 <p className="text-xs text-white/50">
@@ -157,9 +157,9 @@ export function JobForm({
                                 </p>
                             </div>
                             <Switch
-                                id="isRemote"
-                                checked={form.isRemote}
-                                onCheckedChange={(checked) => set("isRemote")(checked)}
+                                id="isWorldwide"
+                                checked={form.isWorldwide}
+                                onCheckedChange={(checked) => set("isWorldwide")(checked)}
                             />
                         </div>
 
@@ -167,9 +167,9 @@ export function JobForm({
                         <div className="grid gap-5 sm:grid-cols-2">
                             <Field
                                 label="Job location"
-                                htmlFor="location"
-                                required={!form.isRemote}
-                                hint={form.isRemote ? "Not required (remote)" : "Required"}
+                                htmlFor="jobLocation"
+                                required={!form.isWorldwide}
+                                hint={form.isWorldwide ? "Not required (remote)" : "Required"}
                             >
                                 <div className="relative">
                                     <MapPin
@@ -177,28 +177,28 @@ export function JobForm({
                                         className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-white/50"
                                     />
                                     <Input
-                                        id="location"
-                                        name="location"
-                                        required={!form.isRemote}
-                                        value={form.location}
-                                        onChange={(e) => set("location")(e.target.value)}
+                                        id="jobLocation"
+                                        name="jobLocation"
+                                        required={!form.isWorldwide}
+                                        value={form.jobLocation}
+                                        onChange={(e) => set("jobLocation")(e.target.value)}
                                         placeholder="e.g. New York, USA"
                                         className={`${inputClass} pl-9`}
                                     />
                                 </div>
                             </Field>
-                            <Field label="Application deadline" htmlFor="deadline">
+                            <Field label="Application deadline" htmlFor="applicationDeadline">
                                 <div className="relative">
                                     <Calendar
                                         aria-hidden
                                         className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-white/50"
                                     />
                                     <Input
-                                        id="deadline"
-                                        name="deadline"
+                                        id="applicationDeadline"
+                                        name="applicationDeadline"
                                         type="date"
-                                        value={form.deadline}
-                                        onChange={(e) => set("deadline")(e.target.value)}
+                                        value={form.applicationDeadline}
+                                        onChange={(e) => set("applicationDeadline")(e.target.value)}
                                         className={`${inputClass} pl-9 [color-scheme:dark]`}
                                     />
                                 </div>
@@ -243,12 +243,12 @@ export function JobForm({
                                     />
                                 </div>
                             </Field>
-                            <Field label="Frequency" htmlFor="salaryFrequency">
+                            <Field label="Frequency" htmlFor="frequency">
                                 <Select
-                                    value={form.salaryFrequency}
-                                    onValueChange={(value) => set("salaryFrequency")(value as JobFormData["salaryFrequency"])}
+                                    value={form.frequency}
+                                    onValueChange={(value) => set("frequency")(value as JobFormData["frequency"])}
                                 >
-                                    <SelectTrigger id="salaryFrequency" className={inputClass}>
+                                    <SelectTrigger id="frequency" className={inputClass}>
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent>

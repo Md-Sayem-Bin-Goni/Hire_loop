@@ -23,7 +23,7 @@ export const createJob = async (data: JobFormData) => {
     return res.json() as Promise<{ insertedId?: string }>
 }
 
-export const getJobs = async (query:  '') => {
+export const getJobs = async (query = "") => {
     const res = await fetch(`${BASE_URL}/jobs?${query}`)
     if (!res.ok) {
         throw new Error(`Fetching jobs failed (status ${res.status})`)
